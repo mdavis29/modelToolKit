@@ -30,7 +30,7 @@ cooksDistanceOptimizer<-function(fit, nfits = 10, p = .5){
 
   }
 
-  if(fit$family$family == 'gaussian'){
+  if(fit$family$family %in% c('gaussian', 'poisson')){
     r2<-c()
     rmses<-c()
     for ( i in 0:nfits){

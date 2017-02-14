@@ -1,4 +1,4 @@
-#' @title  modelToolsMUSC
+#' @title  modelTools
 #' @description This is package of tools to help with basic functions such as finding a good autoencoder. The package provides:
 #'  \itemize{
 #'    \item predictVtreat predicted a model of class 'train' with vtreat preprocessing step
@@ -9,6 +9,6 @@
 #'    \item cooksDistanceOptimizer finds the bets glm model by removing points by their cooks distance
 #'   }
 #' @docType package
-#' @name modelToolsMUSC
+#' @name modelTools
 NULL
 
