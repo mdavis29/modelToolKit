@@ -35,4 +35,3 @@ finds the best single hidden layer autoencoder
 \author{
 Matthew Davis
 }
-

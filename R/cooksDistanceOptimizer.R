@@ -17,7 +17,7 @@ cooksDistanceOptimizer<-function(fit, nfits = 10, p = .5){
     ll<-c()
     for ( i in 0:nfits){
       keep <-cd.order > i
-      fit.temp<-glm(fit$formula, data = fit$data[keep,],family =fit$family )
+      fit.temp<-glm(fit$formula, data = fit$data[keep,],family =fit$family)
       preds<-predict(fit.temp, fit$data)
       cfm<-table(fit$y, preds > p )
       arcs<-append(arcs, (cfm[1]+cfm[4])/sum(cfm))
@@ -30,7 +30,7 @@ cooksDistanceOptimizer<-function(fit, nfits = 10, p = .5){
 
   }
 
-  if(fit$family$family %in% c('gaussian', 'poisson')){
+  if(fit$family$family %in% c('gaussian', 'poisson', 'Tweedie')){
     r2<-c()
     rmses<-c()
     for ( i in 0:nfits){

@@ -25,4 +25,3 @@ the CooksDistance Cut is the point at which to remove any points with greater di
 \author{
 Matthew Davis
 }
-

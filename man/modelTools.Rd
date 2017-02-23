@@ -16,4 +16,3 @@ This is package of tools to help with basic functions such as finding a good aut
    \item cooksDistanceOptimizer finds the bets glm model by removing points by their cooks distance
   }
 }
-
