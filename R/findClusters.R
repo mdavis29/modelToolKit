@@ -1,7 +1,7 @@
 #' @title Find the Optimum Kmeans Cluster Model
 #' @param mydata list of models
 #' @param n a data frame to test the model against
-#' @param scaleIt whether to scale data
+#' @param vtreatIt whether to scale data
 #' @param seed set seed for randomization
 #' @return a data frame of ss errors by algorythim types
 #' @author Matthew Davis
@@ -9,12 +9,16 @@
 #' @details This predict UHC Work RVUS from Work RVUs
 #' @export
 
-findClusters<-function(mydata, n=10, scaleIt=FALSE, seed = 2012){
-      treatment<-designTreatmentsZ(mydata, colnames(mydata))
-      mydata.treated<-prepare(treatment, mydata, pruneSig = 1)
-      mydata.treated<-na.omit(mydata.treated)
+findClusters<-function(mydata, n=10, seed = 2012, vtreatIt = FALSE){
 
-        if(scaleIt==TRUE){mydata.treated<-scale(mydata.treated)}
+      if(vtreatIt == TRUE){
+        treatment<-designTreatmentsZ(mydata, colnames(mydata))
+        mydata.treated<-prepare(treatment, mydata, pruneSig = 1)
+        mydata.treated<-na.omit(mydata.treated)}
+
+      if(vtreatIt == FALSE){
+        mydata.treated <-mydata[,lapply(mydata, class) %in% c('numeric', 'integer')]}
+
       sse.Hartigan.Wong<-c()
       sse.Lloyd<-c()
       sse.Forgy<-c()
@@ -47,6 +51,7 @@ findClusters<-function(mydata, n=10, scaleIt=FALSE, seed = 2012){
                               Lloyd = sse.Lloyd,
                               Forgy = sse.Forgy,
                               MaQueen =sse.MacQueen)
+            print(paste('seed',seed))
             return(output)}
 
 

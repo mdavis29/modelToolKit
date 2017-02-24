@@ -4,16 +4,16 @@
 \alias{findClusters}
 \title{Find the Optimum Kmeans Cluster Model}
 \usage{
-findClusters(mydata, n = 10, scaleIt = FALSE, seed = 2012)
+findClusters(mydata, n = 10, seed = 2012, vtreatIt = FALSE)
 }
 \arguments{
 \item{mydata}{list of models}
 
 \item{n}{a data frame to test the model against}
 
-\item{scaleIt}{whether to scale data}
-
 \item{seed}{set seed for randomization}
+
+\item{vtreatIt}{whether to scale data}
 }
 \value{
 a data frame of ss errors by algorythim types
