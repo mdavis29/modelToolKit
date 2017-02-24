@@ -45,24 +45,24 @@ findClusters<-function(mydata, n=10, seed = 2012, vtreatIt = FALSE){
                   }
       par(mfrow =c(1,2), mar = c(2,1,1,1))
       plot(x = 1:n, y = sse.Hartigan.Wong,
-              type = 'both',
+              type = 'b',
               xlab = 'number of clusters',
               ylab = 'sum of squares error')
-          lines(x = 1:n, y = sse.Lloyd, type = 'both', col = 'orange')
-          lines(x = 1:n, y = sse.Forgy, type = 'both', col = 'red')
-          lines(x = 1:n, y = sse.MacQueen, type = 'both', col = 'blue')
+          lines(x = 1:n, y = sse.Lloyd, type = 'b', col = 'orange')
+          lines(x = 1:n, y = sse.Forgy, type = 'b', col = 'red')
+          lines(x = 1:n, y = sse.MacQueen, type = 'b', col = 'blue')
           legend('topright', fill = c('black', 'orange', 'red','blue' ),cex = .8,
                     legend = c('Hartigan-Wong','Lloyd','Forgy','MacQueen'),
                     title = 'SS Error within Clusters')
 
       plot(x = 1:n, y = sseb.Hartigan.Wong,
-               type = 'both',
+               type = 'b',
                xlab = 'number of clusters',
                ylab = 'sum of squares error')
 
-          lines(x = 1:n, y = sseb.Lloyd, type = 'both', col = 'orange')
-          lines(x = 1:n, y = sseb.Forgy, type = 'both', col = 'red')
-          lines(x = 1:n, y = sseb.MacQueen, type = 'both', col = 'blue')
+          lines(x = 1:n, y = sseb.Lloyd, type = 'b', col = 'orange')
+          lines(x = 1:n, y = sseb.Forgy, type = 'b', col = 'red')
+          lines(x = 1:n, y = sseb.MacQueen, type = 'b', col = 'blue')
           legend('bottomright', fill = c('black', 'orange', 'red','blue' ),cex = .8,
                  legend = c('Hartigan-Wong','Lloyd','Forgy','MacQueen'),
                  title = 'SS Error Between Clusters')

@@ -15,6 +15,7 @@ cooksDistanceOptimizer<-function(fit, nfits = 10, p = .5){
     aucs<-c()
     arcs<-c()
     ll<-c()
+    modList<-list()
     for ( i in 0:nfits){
       keep <-cd.order > i
       fit.temp<-glm(fit$formula, data = fit$data[keep,],family =fit$family)
@@ -23,11 +24,11 @@ cooksDistanceOptimizer<-function(fit, nfits = 10, p = .5){
       arcs<-append(arcs, (cfm[1]+cfm[4])/sum(cfm))
       aucs<-append(aucs, auc(fit$y, preds))
       ll<-append(ll, logLoss(fit$y, predict(fit.temp, fit$data)))
+      modList[[paste('fit', i, sep = '')]] <- fit.temp
       }
     output<-data.frame(accuracy = arcs, auc = aucs, nRemoved = 0:nfits, logLoss = ll)
     output<-cbind(output,CooksDistanceCut = append(NA, cd.reorderd[1:nfits]))
     output<-output[order(output$logLoss),]
-
   }
 
   if(fit$family$family %in% c('gaussian', 'poisson', 'Tweedie')){
@@ -39,11 +40,17 @@ cooksDistanceOptimizer<-function(fit, nfits = 10, p = .5){
       preds<-predict(fit.temp, fit$data)
       r2<-append(r2, cor(fit$y, preds, use = 'complete')^2)
       rmses<-append(rmses,rmse(fit$y, preds))
+      modList[[paste('fit', i, sep = '')]] <- fit.temp
       }
     output<-data.frame(r2=r2, rmse = rmses, nRemoved = 0:nfits)
     output<-cbind(output,CooksDistanceCut = append(NA, cd.reorderd[1:nfits]))
     output<-output[order(output$r2, decreasing = TRUE),]
   }
-  return(output)
+  fit<-modList[[output$nRemoved[1]]]
+  return(list(preformance = output, model = fit))
 }
+
+
+
+
 
