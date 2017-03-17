@@ -1,4 +1,5 @@
 #' @title  modelToolKit
+#' @name modelToolKit
 #' @description This is package of tools to help with basic functions such as finding a good autoencoder. The package provides:
 #'  \itemize{
 #'    \item predictVtreat predicted a model of class 'train' with vtreat preprocessing step
@@ -7,6 +8,9 @@
 #'    \item findBestAutoEncoder finds the best single layer autoencoder
 #'    \item findClusters finds the optimum number of clusters for a cluster model
 #'    \item cooksDistanceOptimizer finds the bets glm model by removing points by their cooks distance
+#'    \item zipCodeDems takes a zipcode and returns 2014 demographics
+#'    \item codeMSDRG takes an msdrg and returns glos and other info
+#'    \item codeAPRDRG takes an aprdrg and returns  mean los and other info
 #'   }
 #' @docType package
 NULL

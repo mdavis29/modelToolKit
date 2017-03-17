@@ -2,6 +2,7 @@
 #' @param trainData a data frame or matrix with numeric columns
 #' @param maxHiddenLayers currently not implimented
 #' @param maxNodes max number of nodes in hidden layer
+#' @param max.int max number of iterations
 #' @param n.models number of models to build
 #' @param rescale logical rescales the data
 #' @description this creates a number of autoencoders and compairs sse to find optimum
@@ -18,16 +19,17 @@ findBestAutoEncoder<-function(trainData,
                               maxHiddenLayers = 1,
                               maxNodes = 2,
                               n.models = 40,
-                              rescale = TRUE){
+                              rescale = TRUE,
+                              max.int = 1000){
       td<-trainData
-      td<-td[, lapply(td, class) %in% c('numeric', 'integer')]
+      td<-td[, apply(td, 2, class) %in% c('numeric', 'integer')]
       td<-as.matrix( td)
 
           a.grid<-data.frame(expand.grid(
               hidenNodes  = seq(1,maxNodes),
               rhos = seq(0.01, .6, by = 0.05) ,
               epsilons = seq(0.01, .2, by = 0.02),
-              opt.meths =  c("BFGS", "L-BFGS-B"),
+              opt.meths =  c("BFGS"),
               unit.types = c("logistic", "tanh"),
               lambdas = seq(1e-20, 1e-2, by= 1e-3),
               betas = seq(1e-20, 1e-2, by= 1e-3)))
@@ -61,7 +63,7 @@ findBestAutoEncoder<-function(trainData,
                                 unit.type = as.character(a.grid$unit.types[bestIndex]),
                                 lambda = a.grid$lambdas[bestIndex],
                                 beta = a.grid$betas[bestIndex],
-                                max.iterations = 2000,
+                                max.iterations = max.int,
                                 rho = a.grid$rhos[bestIndex],
                                 rescale.flag =rescale )
                   returnList<-list()

@@ -5,7 +5,7 @@
 \title{Find the Best single hidden layer Autoencoder}
 \usage{
 findBestAutoEncoder(trainData, maxHiddenLayers = 1, maxNodes = 2,
-  n.models = 40, rescale = TRUE)
+  n.models = 40, rescale = TRUE, max.int = 1000)
 }
 \arguments{
 \item{trainData}{a data frame or matrix with numeric columns}
@@ -17,6 +17,8 @@ findBestAutoEncoder(trainData, maxHiddenLayers = 1, maxNodes = 2,
 \item{n.models}{number of models to build}
 
 \item{rescale}{logical rescales the data}
+
+\item{max.int}{max number of iterations}
 }
 \value{
 \itemize{
