@@ -74,4 +74,3 @@ findClusters<-function(mydata, n=10, seed = 2012, vtreatIt = FALSE){
                               MaQueen =sse.MacQueen)
             print(paste('seed',seed))
             return(output)}
-findClusters(mtcars)
