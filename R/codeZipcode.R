@@ -11,7 +11,7 @@
 #'  \item AGI  5 = $100,000 under $200,000:
 #'  \item AGI  6 = $200,000 or more}
 
-zipCodeDems<-function(zipcodes){
+zipCodeDems<-function(zipcodes, pca = FALSE){
   getZicode<-function(zc){
     if(nchar(zc) == 5){
         dems<-irs[irs[, "zipCode" ] == zc,
@@ -28,6 +28,16 @@ zipCodeDems<-function(zipcodes){
       return(dems)
       }
   output<-t(sapply(zipcodes, getZicode))
+  if( pca == TRUE){
+    pcs<-predict(preProcZipcodes, output)  
+    colnames(pcs)<-c('zipCodeComp1', 'zipCodeComp2')
+    output<-cbind(zipCode = zipcodes, pcs)
+    
+    stateTest<-round(mean(sapply(zipcodes, nchar), na.rm = TRUE),0) == 2
+    if(stateTest == TRUE){
+      colnames(output)[1]<-"stateCode" 
+      }
+  }
   return(output)
 }
 
