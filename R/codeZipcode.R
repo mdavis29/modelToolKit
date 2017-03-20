@@ -1,5 +1,6 @@
 #' @title Find the Best single hidden layer Autoencoder
 #' @param zipcodes a vector of zipcodes
+#' @param pca logical, to return principal components of IRS data
 #' @description looks up zip codes 2014 IRS tax data aggregated
 #' @author Matthew Davis
 #' @export
@@ -29,13 +30,13 @@ zipCodeDems<-function(zipcodes, pca = FALSE){
       }
   output<-t(sapply(zipcodes, getZicode))
   if( pca == TRUE){
-    pcs<-predict(preProcZipcodes, output)  
+    pcs<-predict(preProcZipcodes, output)
     colnames(pcs)<-c('zipCodeComp1', 'zipCodeComp2')
     output<-cbind(zipCode = zipcodes, pcs)
-    
+
     stateTest<-round(mean(sapply(zipcodes, nchar), na.rm = TRUE),0) == 2
     if(stateTest == TRUE){
-      colnames(output)[1]<-"stateCode" 
+      colnames(output)[1]<-"stateCode"
       }
   }
   return(output)

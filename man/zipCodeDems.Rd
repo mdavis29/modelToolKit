@@ -4,10 +4,12 @@
 \alias{zipCodeDems}
 \title{Find the Best single hidden layer Autoencoder}
 \usage{
-zipCodeDems(zipcodes)
+zipCodeDems(zipcodes, pca = FALSE)
 }
 \arguments{
 \item{zipcodes}{a vector of zipcodes}
+
+\item{pca}{logical, to return principal components of IRS data}
 }
 \description{
 looks up zip codes 2014 IRS tax data aggregated

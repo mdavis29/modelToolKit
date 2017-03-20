@@ -2,7 +2,7 @@ Package: modelToolKit
 Type: Package
 Title: Predictive Models for basic tasks at MUSC
 Version: 0.1.6
-Author: Matthew Davis
+Author: Matthew Davis, James Zeng
 Maintainer: Matthew davsi <davismat@musc.edu>
 Description: This is a package of common model tools used at musc
 License: MIT
