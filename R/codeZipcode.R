@@ -34,7 +34,7 @@ zipCodeDems<-function(zipcodes, pca = FALSE){
     colnames(pcs)<-c('zipCodeComp1', 'zipCodeComp2')
     output<-cbind(zipCode = zipcodes, pcs)
 
-    stateTest<-round(mean(sapply(zipcodes, nchar), na.rm = TRUE),0) == 2
+    stateTest<-round(mean(sapply(as.character(zipcodes), nchar), na.rm = TRUE),0) == 2
     if(stateTest == TRUE){
       colnames(output)[1]<-"stateCode"
       }
