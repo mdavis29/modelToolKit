@@ -14,13 +14,13 @@
 
 zipCodeDems<-function(zipcodes, pca = FALSE){
   getZicode<-function(zc){
-    if(nchar(zc) == 5){
+    if(nchar(as.character(zc)) == 5){
         dems<-irs[irs[, "zipCode" ] == zc,
                 !colnames(irs) %in% c('The.State.Federal.Information.Processing.System..FIPS..code',
                                       'stateCode', 'zipCode')]
         dems<-sapply(dems, mean, na.rm = TRUE)
         }
-    if(nchar(zc) == 2){
+    if(nchar(as.character(zc)) == 2){
         dems<-irs[irs[, "stateCode" ] == zc,
                 !colnames(irs) %in% c('The.State.Federal.Information.Processing.System..FIPS..code',
                                       'stateCode', 'zipCode')]
