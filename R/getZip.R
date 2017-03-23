@@ -7,7 +7,7 @@
 #' @author Matthew Davis
 #' @export
 getZip<-function(zipCodes, pca = FALSE){
-  zc<-as.numeric(zipCodes)
+  zc<-as.numeric(as.character(zipCodes))
   demCols<-colnames(irs)[!colnames(irs) %in%  c('zipCode', 'stateCode')]
   irs.temp<-irs[irs$zipCode %in% zc,]
   avg<-sapply(irs[,demCols],
