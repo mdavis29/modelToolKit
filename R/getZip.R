@@ -9,12 +9,17 @@
 getZip<-function(zipCodes, pca = FALSE){
   zc<-as.numeric(as.character(zipCodes))
   demCols<-colnames(irs)[!colnames(irs) %in%  c('zipCode', 'stateCode')]
-  irs.temp<-irs[irs$zipCode %in% zc,]
+  validTest<-!zc %in% c(0,00000,99999) &
+    nchar(as.character(zc)) == 5 &
+    !is.na(zc)
   avg<-sapply(irs[,demCols],
               mean,
               na.rm = TRUE)
-  validTest<-!zc %in% c(0,00000,NA,99999) &
-                nchar(as.character(zc)) == 5
+  uniqueInputZips<-unique(zc[validTest])
+  uniqueIrsZips<-unique(irs$zipCode)
+  keepZips<-intersect(uniqueInputZips,uniqueIrsZips )
+
+  irs.temp<-irs[irs$zipCode %in% keepZips, ]
   output<-NULL
   output.temp<-NULL
   for ( i in 1:(length(zc))){
