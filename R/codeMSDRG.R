@@ -7,22 +7,26 @@
 #' @details GMLOS = geometric length of stay, AMLOS arithemtic length of stay
 #'
 codeMSDRG<-function(mydata){
-  output<-data.frame()
-  test1 <- 3 >= round(mean(sapply(as.character(mydata), nchar), na.rm = TRUE),1)
-  if (test1 == FALSE){
-    for ( i in 1:(length(mydata))){
-      temp<-ms[ms[,"MS.DRG.Title"] == mydata[i], ][1,c(7,8,9)]
-      colnames(temp)<-c('msDrgWeight', 'gmlos', 'amlos')
-      output<-rbind(output, temp)
-      }
-  }
-  if (test1 == TRUE){
-    for ( i in 1:(length(mydata))){
-      temp<-ms[ms[,"MS.DRG"] == mydata[i], ][1,c(7,8,9)]
-      colnames(temp)<-c('msDrgWeight', 'gmlos', 'amlos')
-      output<-rbind(output, temp)
+  avg<-sapply(ms[, 7:9], median, na.rm = TRUE)
+  lookupDF<-NULL
+  uniqueDRG<-unique(mydata)
+  haveDRGs<-as.character(ms[,'MS.DRG.Title'])
+  lookupDRGs<-uniqueDRG[uniqueDRG %in% haveDRGs ]
+  trimedTable<-ms[haveDRGs %in% lookupDRGs, ]
+  trimedHaveDRG<-as.character(trimedTable[,'MS.DRG.Title' ])
+  for ( i in 1:(length( lookupDRGs))){
+    temp<-head(trimedTable[trimedHaveDRG == lookupDRGs[i],6:9],1)
+    lookupDF<-rbind(lookupDF, temp)
     }
+  
+  mydataDF<-data.frame(MS.DRG.Title = mydata)
+  output<-merge(mydataDF,lookupDF,all.x = TRUE  )
+
+  print(paste( sum(is.na(output$Weights)), 'misses'))
+  output$Weights[is.na(output$Weights)]<-avg[1]
+  output$Geometric.mean.LOS [is.na(output$Geometric.mean.LOS)]<-avg[2]
+  output$Arithmetic.mean.LOS[is.na(output$Arithmetic.mean.LOS)]<-avg[3]
+  return(output)
   }
-      return(output)
-  }
+
 
