@@ -10,13 +10,13 @@ getZip<-function(zipCodes, pca = FALSE){
   numCols <- colnames(irs)[!colnames(irs) %in% c('stateCode', 'zipCode')]
   avg<-sapply(irs[,numCols ], median)
   ucodes<-unique(as.numeric(as.character(zipCodes)))
-  vcodes<-ucodes[!ucodes %in% c(0,99999) & !is.na(ucodes) & nchar(as.character(ucodes)) == 5 ]
+  vcodes<-ucodes[!ucodes %in% c(0,99999) & !is.na(ucodes) ]
   lookupCodes<-vcodes[vcodes %in% irs$zipCode ]
   trimmedIrs<-irs[irs$zipCode %in% lookupCodes, ]
   tempDF<-NULL
   for (i in 1:(length(lookupCodes))){
     temp <- head(trimmedIrs[trimmedIrs$zipCode %in%  lookupCodes[i],],1)
-    tempDF <-rbind(tempDF, temp)  
+    tempDF <-rbind(tempDF, temp)
     }
   lookupDF<-data.frame(zipCode = zipCodes )
   output<-merge(lookupDF,  tempDF, all.x = TRUE)
