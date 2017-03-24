@@ -7,35 +7,32 @@
 #' @author Matthew Davis
 #' @export
 getZip<-function(zipCodes, pca = FALSE){
-  zc<-as.numeric(as.character(zipCodes))
-  demCols<-colnames(irs)[!colnames(irs) %in%  c('zipCode', 'stateCode')]
-  validTest<-!zc %in% c(0,00000,99999) &
-    nchar(as.character(zc)) == 5 &
-    !is.na(zc)
-  avg<-sapply(irs[,demCols],
-              mean,
-              na.rm = TRUE)
-  uniqueInputZips<-unique(zc[validTest])
-  uniqueIrsZips<-unique(irs$zipCode)
-  keepZips<-intersect(uniqueInputZips,uniqueIrsZips )
-
-  irs.temp<-irs[irs$zipCode %in% keepZips, ]
-  output<-NULL
-  output.temp<-NULL
-  for ( i in 1:(length(zc))){
-    if(validTest[i] == TRUE){
-    output.temp<-irs.temp[irs.temp$zipCode == zc[i],demCols][1,]
-      }
-    if(validTest[i] == FALSE | is.null(output.temp) ){
-    output.temp<-avg
-      }
-    output<-rbind(output, output.temp)
-    output.temp<-NULL
+  numCols <- colnames(irs)[!colnames(irs) %in% c('stateCode', 'zipCode')]
+  avg<-sapply(irs[,numCols ], median)
+  ucodes<-unique(as.numeric(as.character(zipCodes)))
+  vcodes<-ucodes[!ucodes %in% c(0,99999) & !is.na(ucodes) & nchar(as.character(ucodes)) == 5 ]
+  lookupCodes<-vcodes[vcodes %in% irs$zipCode ]
+  trimmedIrs<-irs[irs$zipCode %in% lookupCodes, ]
+  tempDF<-NULL
+  for (i in 1:(length(lookupCodes))){
+    temp <- head(trimmedIrs[trimmedIrs$zipCode %in%  lookupCodes[i],],1)
+    tempDF <-rbind(tempDF, temp)  
+    }
+  lookupDF<-data.frame(zipCode = zipCodes )
+  output<-merge(lookupDF,  tempDF, all.x = TRUE)
+  k <- 0
+  for ( j in 1:(nrow(output))){
+    if (sum(is.na(output[j,]))>2){
+        output[j,numCols]<-avg
+        k<-k+1
+        }
     }
   if(pca == TRUE){
-    pc<-predict(preProc, output)
-    colnames(pc)<-paste('zipCode', colnames(pc), sep = '')
+    pc <- predict(preProc,output)
+    colnames(pc)<-paste('zc', colnames(pc), sep = '')
     output<-cbind(output, pc)
     }
+
+  print(paste(k,'misses'))
   return(output)
 }
