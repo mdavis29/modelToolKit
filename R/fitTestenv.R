@@ -1,15 +1,60 @@
-#' @title Test models in an enviroment
-#' @param model.env enviroment where 'train' class models are stroed
-#' @param testSet a data frame to test the model against
-#' @param treatment a 'teatment' class object from vtreat package (if this was used as a pre proc step on input data)
-#' @return vector or performance metrics for the model
+#' @title Test Enviroment 2 class
+#' @param mydata data frame to use as test data
+#' @param e enviroment with models of class train are stored
+#' @param classCol name of the class column
+#' @param levs levels of the class column
+#' @param referenceLevNum  of the reference level to consider success (ie typically 1 from 0/1 class)
+#' @return a data frame of preformance metrics for all the models in the enviroments
 #' @description usefull if you save a bunch models in an enviroment and want to test them all
 #' @author Matthew Davis
-#' @details This predict UHC Work RVUS from Work RVUs
+#' @details this function is for choosing the best model based on a test set
 #' @export
-#'
-fitTest.env<-function(model.env, testSet = toTest, treatment = NULL ){
-  output<-t(data.frame(eapply(model.env, fitTest, testSet = testSet, Treatment = treatment)))
-  output<-output[order(output[,1]),]
+
+testEnv2class<-function(mydata, e,
+                        classCol = 'Class',
+                        levs = c('notReAdmitted','reAdmitted'),
+                        referenceLevNum = 2 ){
+  output<-data.frame()
+  modelNames<-ls(e)
+  for ( i in 1:(length(modelNames))){
+    fit.temp<-get(modelNames[i], envir = e)
+    xNamesTest<-all(fit.temp$finalModel$xNames %in% colnames(mydata))
+    if(xNamesTest){
+      print(paste('now analyzing', modelNames[i] ))
+      predsr<-predict(fit.temp, mydata[,fit.temp$finalModel$xNames ],type = 'raw')
+      predsp<-predict(fit.temp, mydata[,fit.temp$finalModel$xNames ],type = 'prob')
+      preds<-data.frame(obs = mydata[, classCol] ,pred = predsr, predsp)
+      twoCSum<-caret::twoClassSummary(preds, lev = levs, model = modelNames[i] )
+      ll<-caret::mnLogLoss(preds, lev = levs, model = modelNames[i] )
+      r<-pROC::roc(preds$obs, preds[, levs[referenceLevNum]], levels =levs )
+      threshB<-pROC::coords(r, x = 'best', best.method = 'closest.topleft')
+      threshY<-pROC::coords(r, x = 'best', best.method = "youden")
+
+      cm<-ModelMetrics::confusionMatrix(ifelse(preds$obs == levs[referenceLevNum],1,0),
+                                        preds[, levs[referenceLevNum]],
+                                        cutoff = threshB[1] )
+      tp<-cm[1,1]
+      tn<-cm[2,2]
+      fp<-cm[2,1]
+      fn<-cm[1,2]
+      x<-c(ll,twoCSum, as.numeric(r$auc),threshB,threshY)
+      names(x)<-c(names(ll),
+                  paste('twoClassSummary',names(twoCSum),sep = ''),
+                  'AUCofROC',
+                  paste('threshB',names(threshB),sep = ''),
+                  paste('threshY',names(threshY),sep = ''))
+      temp<-data.frame(t(x), modelNames = modelNames[i])
+      temp$accuracyBestThresh<-(tp+tn)/(tp+tn+fp+fn)
+
+      temp$precisionBestThresh<-tp/(tp+fp)
+      temp$recallBestThresh<-tp/(tp+fn)
+      output<-rbind(output, temp)
+    }
+    if(xNamesTest == FALSE){
+      missing<-fit.temp$finalModel$xNames[!fit.temp$finalModel$xNames %in% colnames(mydata)]
+      print(paste('missing columns', missing))
+    }
+  }
+  output<-output[order(output$logLoss),]
   return(output)
 }
