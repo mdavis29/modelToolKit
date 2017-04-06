@@ -8,6 +8,8 @@ size(mydata, units = "Mb")
 }
 \arguments{
 \item{mydata}{an r object}
+
+\item{units}{units in the format(object.size) method}
 }
 \value{
 a data frame of preformance metrics for all the models in the enviroments

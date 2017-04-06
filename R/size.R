@@ -1,6 +1,6 @@
 #' @title size
 #' @param mydata an r object
-#' @param units
+#' @param units units in the format(object.size) method
 #' @return a data frame of preformance metrics for all the models in the enviroments
 #' @description usefull if you save a bunch models in an enviroment and want to test them all
 #' @author Matthew Davis
