@@ -4,8 +4,8 @@
 \alias{testEnv2class}
 \title{Test Enviroment 2 class}
 \usage{
-testEnv2class(mydata, e, classCol = "Class", levs = c("notReAdmitted",
-  "reAdmitted"), referenceLevNum = 2)
+testEnv2class(mydata, e, classCol = "Class", predVars = NULL,
+  levs = c("notReAdmitted", "reAdmitted"), referenceLevNum = 2)
 }
 \arguments{
 \item{mydata}{data frame to use as test data}
@@ -13,6 +13,8 @@ testEnv2class(mydata, e, classCol = "Class", levs = c("notReAdmitted",
 \item{e}{enviroment with models of class train are stored}
 
 \item{classCol}{name of the class column}
+
+\item{predVars}{column of predictor varaibles (optional), guess of the first model if NULL}
 
 \item{levs}{levels of the class column}
 
