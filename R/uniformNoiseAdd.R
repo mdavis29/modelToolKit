@@ -6,6 +6,7 @@
 #' @author Matthew Davis
 #' @details uses min*percet and max*percent to run runif
 #' @export
+#' 
 uniformNoiseAdd<-function(mydata,percent = 0.1 ,seed = 2016){
   set.seed(seed)
   if(class(mydata) %in% c('numeric', 'integer')){
