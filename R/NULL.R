@@ -2,13 +2,13 @@
 #' @name modelToolKit
 #' @description This is package of tools to help with basic functions such as finding a good autoencoder. The package provides:
 #'  \itemize{
-#'    \item predictVtreat predicted a model of class 'train' with vtreat preprocessing step
-#'    \item fit.test preforms a postResample on a model (class 'train') on a new data, with vtreat
-#'    \item fitTest.env runs a postResample test on a group of models saved in an enviroment
-#'    \item findBestAutoEncoder finds the best single layer autoencoder
+#'    \item predict.kmeans a predict method for K means 
+#'    \item reOrderDataFrameFactors re orders data frame factors according to frequeby
+#'    \item multiColSearch search a data frame for values
+#'    \item usableColumns finds columns in a df that are usable for Machine Learning
+#'    \item uniformNoiseAdd  add noise to a matrix
 #'    \item findClusters finds the optimum number of clusters for a cluster model
-#'    \item cooksDistanceOptimizer finds the bets glm model by removing points by their cooks distance
-#'    \item zipCodeDems takes a zipcode and returns 2014 demographics
+#'    \item getZiop takes a zipcode and returns 2014 demographics
 #'    \item codeMSDRG takes an msdrg and returns glos and other info
 #'    \item codeAPRDRG takes an aprdrg and returns  mean los and other info
 #'   }
