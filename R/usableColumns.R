@@ -30,6 +30,7 @@ usableColumns<-function(mydata, maxUnique = 100, maxPrecentOneClass = .99, verbo
     if(max(tempTab)/sum(tempTab) > maxPrecentOneClass)tempOut<-NULL
     tempOut
   }
+  stopCluster(cl)
   output<-unlist(output)
   return(output)
 }
