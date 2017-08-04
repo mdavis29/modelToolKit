@@ -22,30 +22,26 @@ find2dfDiffs<-function(df1, df2, verbose = TRUE){
   output <- foreach( i = 1:n, .inorder = TRUE,.combine = 'rbind') %dopar%{
       tempOut<-data.frame(pval = NA, 
                           meanDf1 = NA, 
-                          meanDf2 = NA,
-                          normDf1 = NA, 
-                          normDf2 = NA )
+                          meanDf2 = NA )
       temp1<-as.numeric(na.omit(df1[, keepCols[i]]))
       temp2<-as.numeric(na.omit(df2[, keepCols[i]]))
-      if(length(unique(temp1)) > 1 & 
+      l1<-length(temp1)
+      l2<-length(temp2)
+      if( length(unique(temp1)) > 1 & 
           length(unique(temp2)) > 1 & 
-          length(temp1) > 4 &
-          length(temp2) > 4){
+          l1 > 4 &
+          l2 > 4){
         test<-try(t.test(temp1, temp2))
         if(class(test) == 'htest'){
           tempOut$pval <- test$p.value
           tempOut$meanDf1 <- test$estimate[1]
           tempOut$meanDf2 <- test$estimate[2]
-          stest1<-try(shapiro.test(temp1)$p.value)
-          if(class(stest1) == 'numeric')tempOut$normDf1<-stest1
-          stest2<-try(shapiro.test(temp2)$p.value)
-          if(class(stest2) == 'numeric')tempOut$normDf2<-stest2
           }
         }
       data.frame(tempOut)
   }
   stopCluster(cl)    
-  #if(verbose)print(paste('dim output',paste( dim(output), collapse = ',')))
-  #rownames(output)<-keepCols  
+  if(verbose)print(paste('dim output',paste( dim(output), collapse = ',')))
+  rownames(output)<-keepCols  
   return(output)
 }  
