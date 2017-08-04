@@ -26,20 +26,25 @@ find2dfDiffs<-function(df1, df2, verbose = TRUE){
                           normDf1 = NA, 
                           normDf2 = NA )
       temp1<-na.omit(df1[, keepCols[i]])
+      if(verbose)print(keepCols[i])
+      if(verbose)print(head(temp1))
       temp2<-na.omit(df2[, keepCols[i]])
+      if(verbose)print(head(temp1))
       if(length(unique(temp1)) > 1 & 
           length(unique(temp2)) > 1 & 
           length(temp1) > 3 &
           length(temp2) > 4){
-        test<-t.test(temp1, temp2)
-        tempOut$pval = test$p.value
-        tempOut$meanDf1<-test$estimate[1]
-        tempOut$meanDf2<-test$estimate[2]
-        if(length(unique(temp1))>3 ){
-          tempOut$normDf1<-shapiro.test(temp1)$p.value
-        }
-        if(length(unique(temp2))>3 ){
-          tempOut$normDf2<-shapiro.test(temp2)$p.value
+        test<-try(t.test(temp1, temp2))
+        if(class(test) == 'htest'){
+          tempOut$pval = test$p.value
+          tempOut$meanDf1<-test$estimate[1]
+          tempOut$meanDf2<-test$estimate[2]
+          if(length(unique(temp1))>3 ){
+            tempOut$normDf1<-shapiro.test(temp1)$p.value
+          }
+          if(length(unique(temp2))>3 ){
+            tempOut$normDf2<-shapiro.test(temp2)$p.value
+          }
         }
       }
       tempOut
