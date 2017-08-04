@@ -4,7 +4,7 @@
 \alias{find2dfDiffs}
 \title{Find the Optimum Kmeans Cluster Model}
 \usage{
-find2dfDiffs(df1, df2, verbose)
+find2dfDiffs(df1, df2, verbose = TRUE)
 }
 \arguments{
 \item{df1}{a data frame}

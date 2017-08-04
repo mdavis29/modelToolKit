@@ -7,7 +7,7 @@
 #' @description builds a bunch of cluster models to find the optimum number of clusters
 #' @details This predict UHC Work RVUS from Work RVUs
 #' @export
-find2dfDiffs<-function(df1, df2, verbose){
+find2dfDiffs<-function(df1, df2, verbose = TRUE){
   useCols1<-colnames(df1)[lapply(df1, class) %in% c('numeric', 'integer')]
   useCols2<-colnames(df2)[lapply(df2, class) %in% c('numeric', 'integer')]
   keepCols<-intersect(useCols1, useCols2)
@@ -15,10 +15,10 @@ find2dfDiffs<-function(df1, df2, verbose){
   n<-length(keepCols)
   ##set up parallel frame work
   cores<-parallel::detectCores()    
-  cores<-if(cores>n)cores<-n
+  cores<-min(n, cores)
   cl<-makeCluster(cores, type = 'SOCK')
   registerDoParallel(cl)
-  if(verbose)print(paste(cores, 'cores detected'))
+  if(verbose)print(paste('using cores : ', cores))
   output <- foreach( i = 1:n, .inorder = TRUE,.combine = 'rbind') %dopar%{
       tempOut<-data.frame(pval = NA, 
                           meanDf1 = NA, 
