@@ -12,7 +12,6 @@
 usableColumns<-function(mydata, maxUnique = 100, maxPrecentOneClass = .99, verbose = FALSE){
   mydata<-as.data.frame(mydata)
   nc<-ncol(mydata)
-  library(doParallel)
   cl<-makeCluster(parallel::detectCores())
   registerDoParallel(cl)
   if(verbose)print(cl)
