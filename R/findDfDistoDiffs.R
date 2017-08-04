@@ -27,7 +27,10 @@ find2dfDiffs<-function(df1, df2, verbose = TRUE){
                           normDf2 = NA )
       temp1<-na.omit(df1[, keepCols[i]])
       temp2<-na.omit(df2[, keepCols[i]])
-      if(length(temp1) > 4 & length(temp2)>4 ){
+      if(length(unique(temp1)) > 1 & 
+          length(unique(temp2)) > 1 & 
+          length(temp1) > 3 &
+          length(temp2) > 4){
         test<-t.test(temp1, temp2)
         tempOut$pval = test$p.value
         tempOut$meanDf1<-test$estimate[1]
