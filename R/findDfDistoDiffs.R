@@ -1,21 +1,24 @@
 #' @title Find the Optimum Kmeans Cluster Model
 #' @param df1 a data frame
 #' @param df2 a data frame 
+#' @param verbose print debugging output
 #' @return a data frame of ss errors by algorythim types
 #' @author Matthew Davis
 #' @description builds a bunch of cluster models to find the optimum number of clusters
 #' @details This predict UHC Work RVUS from Work RVUs
 #' @export
-find2dfDiffs<-function(df1, df2){
+find2dfDiffs<-function(df1, df2, verbose){
   useCols1<-colnames(df1)[lapply(df1, class) %in% c('numeric', 'integer')]
   useCols2<-colnames(df2)[lapply(df2, class) %in% c('numeric', 'integer')]
   keepCols<-intersect(useCols1, useCols2)
+  if(verbose)print(keepCols)
   n<-length(keepCols)
   ##set up parallel frame work
   cores<-parallel::detectCores()    
   cores<-if(cores>n)cores<-n
   cl<-makeCluster(cores, type = 'SOCK')
   registerDoParallel(cl)
+  if(verbose)print(paste(cores, 'cores detected'))
   output <- foreach( i = 1:n, .inorder = TRUE,.combine = 'rbind') %dopar%{
       tempOut<-data.frame(pval = NA, 
                           meanDf1 = NA, 
@@ -39,6 +42,7 @@ find2dfDiffs<-function(df1, df2){
       tempOut
   }
   stopCluster(cl)    
+  if(verbose)print(paste('dim output',paste( dim(output), collapse = ',')))
   rownames(output)<-keepCols  
   return(output)
 }  

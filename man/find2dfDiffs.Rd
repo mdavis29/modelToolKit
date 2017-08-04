@@ -4,12 +4,14 @@
 \alias{find2dfDiffs}
 \title{Find the Optimum Kmeans Cluster Model}
 \usage{
-find2dfDiffs(df1, df2)
+find2dfDiffs(df1, df2, verbose)
 }
 \arguments{
 \item{df1}{a data frame}
 
 \item{df2}{a data frame}
+
+\item{verbose}{print debugging output}
 }
 \value{
 a data frame of ss errors by algorythim types
