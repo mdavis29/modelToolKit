@@ -4,7 +4,7 @@
 \alias{predict.kmeans}
 \title{predict method for Kmeans}
 \usage{
-\method{predict}{kmeans}(fit, newData)
+\method{predict}{kmeans}(object, newdata)
 }
 \arguments{
 \item{fit}{kmeans class object}

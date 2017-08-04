@@ -1,14 +1,12 @@
 #' @title Find the Optimum Kmeans Cluster Model
-#' @param mydata list of models
-#' @param n a data frame to test the model against
-#' @param seed set seed for randomization
-#' @param plotIt whether to plot solution 
+#' @param df1 a data frame
+#' @param df2 a data frame 
 #' @return a data frame of ss errors by algorythim types
 #' @author Matthew Davis
 #' @description builds a bunch of cluster models to find the optimum number of clusters
 #' @details This predict UHC Work RVUS from Work RVUs
 #' @export
-findDfDistoDiffs<-function(df1, df2){
+find2dfDiffs<-function(df1, df2){
   useCols1<-colnames(df1)[lapply(df1, class) %in% c('numeric', 'integer')]
   useCols2<-colnames(df2)[lapply(df2, class) %in% c('numeric', 'integer')]
   keepCols<-intersect(useCols1, useCols2)

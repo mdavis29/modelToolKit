@@ -3,16 +3,17 @@
 #' @param newData data frame of new data
 #' @return a data frame of ss errors per cluster, cluster classification and totalSSE
 #' @author Matthew Davis
+#' @import stats
 #' @description builds a bunch of cluster models to find the optimum number of clusters
 #' @details cluster reported back as a factor in the output data frame
 #' @export
-
-predict.kmeans<-function(fit, newData){
+#' 
+predict.kmeans<-function(object, newdata){
   cols<-colnames(fit$centers)
-  if(!all(cols %in% colnames( newData))){
-    stop(paste(cols[!cols %in% colnames(mydata)], 'missing from mydata'))
+  if(!all(cols %in% colnames( newdata))){
+    stop(paste(cols[!cols %in% colnames(newdata)], 'missing from newdata'))
   }
-  mydata<-as.matrix(newData[,cols])
+  newdata.m<-as.matrix(newdata[,cols])
   centers<-fit$centers
   n<-nrow(centers)
   cores<-parallel::detectCores()    
@@ -22,7 +23,7 @@ predict.kmeans<-function(fit, newData){
   output<-foreach(i =1:n,
                   .packages = 'stats', 
                   .combine = 'cbind' ) %dopar%{
-    apply(mydata,c(1), function(x)sum(x-centers[i,])^2 )
+    as.matrix(apply(newdata.m,c(1), function(x)sum(x-centers[i,])^2 ), ncol = 1)
                   }
   stopCluster(cl)
   output<-as.data.frame(output)
@@ -30,5 +31,3 @@ predict.kmeans<-function(fit, newData){
   output$cluster<-as.factor(apply(output, 1, which.min))
   output$totalSSE<-apply(output,1, sum)
   return(output)}
-
-

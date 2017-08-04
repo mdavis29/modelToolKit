@@ -24,7 +24,8 @@ multiColSearch<-function(mydata, val, cols = NULL, returnMat = FALSE, all = TRUE
     as.character(mydata[,cols[i]]) %in% as.character(val)
   } 
   stopCluster(cl)
-  if(!is.null(ncol(output)))colnames(output)<-cols{
+  if(!is.null(ncol(output))){
+    colnames(output)<-cols
     if(!returnMat & all ){output<-apply(output, c(1), all)}
     if(!returnMat & !all){output<-apply(output, c(1), any)}
   }
