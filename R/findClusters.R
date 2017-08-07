@@ -3,6 +3,7 @@
 #' @param n a data frame to test the model against
 #' @param seed set seed for randomization
 #' @param plotIt whether to plot solution 
+#' @param verbose whether to print debugging output
 #' @return a data frame of ss errors by algorythim types
 #' @author Matthew Davis
 #' @description builds a bunch of cluster models to find the optimum number of clusters

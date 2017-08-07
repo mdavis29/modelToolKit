@@ -1,6 +1,7 @@
 #' @title Unifrom Noise Adder
 #' @param mydata a dataframe or vector
 #' @param percent pecent of noise to add from 0 to 1
+#' @param seed seed for randomization
 #' @return vector or performance metrics for the model
 #' @description used for adding an amount of noise to a data frame
 #' @author Matthew Davis

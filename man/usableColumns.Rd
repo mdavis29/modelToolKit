@@ -12,9 +12,9 @@ usableColumns(mydata, maxUnique = 100, maxPrecentOneClass = 0.99,
 
 \item{maxUnique}{maxim number of unique values in a factor column}
 
-\item{verbose}{print troubleshouting information}
+\item{maxPrecentOneClass}{maximun percent of any one class to be usable}
 
-\item{seed}{max Percentage of the majority class}
+\item{verbose}{print troubleshouting information}
 }
 \value{
 a vector of column names

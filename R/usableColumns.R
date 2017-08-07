@@ -1,7 +1,7 @@
 #' @title Usable Columns
 #' @param mydata a data frame
 #' @param maxUnique maxim number of unique values in a factor column
-#' @param seed max Percentage of the majority class 
+#' @param maxPrecentOneClass maximun percent of any one class to be usable
 #' @param verbose print troubleshouting information  
 #' @return a vector of column names
 #' @author Matthew Davis

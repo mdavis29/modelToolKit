@@ -15,6 +15,8 @@ findClusters(mydata, n = 10, seed = 2012, plotIt = TRUE,
 \item{seed}{set seed for randomization}
 
 \item{plotIt}{whether to plot solution}
+
+\item{verbose}{whether to print debugging output}
 }
 \value{
 a data frame of ss errors by algorythim types

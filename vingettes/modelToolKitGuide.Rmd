@@ -14,20 +14,24 @@ set.seed(2012)
 fit<-rpart(Species~., iris)
 km<-kmeans(iris[,1:4], 3)
 preds<-predict(fit, iris, type = 'class')
-head(preds,2)
 obs<-iris[,'Species']
-head(obs,2)
 cats<-as.factor(km$cluster)
-head(cats,2)
 preformanceByCatagory(preds, obs, cats)
 
 ```
+
+Assign new clusters using kmeans to new data 
+
+```{r }
+head(predictKmeans(km, iris))
+```
+
 Find differences between data frames
 ```{r}
 
 find2dfDiffs(iris[,1:4],iris[, 1:4]+.12)
 ```
-
+Find the optimal number of clusters
 ```{r, }
 findClusters(iris[,1:4])
 ```

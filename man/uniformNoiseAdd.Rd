@@ -10,6 +10,8 @@ uniformNoiseAdd(mydata, percent = 0.1, seed = 2016)
 \item{mydata}{a dataframe or vector}
 
 \item{percent}{pecent of noise to add from 0 to 1}
+
+\item{seed}{seed for randomization}
 }
 \value{
 vector or performance metrics for the model
