@@ -9,7 +9,7 @@
 #' @details This predict UHC Work RVUS from Work RVUs
 #' @export
 
-findClusters<-function(mydata, n=10, seed = 2012,plotIt = TRUE, vebose = FALSE){
+findClusters<-function(mydata, n=10, seed = 2012,plotIt = TRUE, verbose = FALSE){
   set.seed(seed)
   mydata<-as.matrix(mydata[,apply(mydata, c(2), class) %in% c('integer', 'numeric')])
   cores<-parallel::detectCores()    
