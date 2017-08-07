@@ -2,7 +2,10 @@
 title: "modelToolKitGuide"
 author: "Matthew Davis"
 date: "August 4, 2017"
-output: html_document
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 Get predictive model prefomance by a catagory
 ```{r setup, message=FALSE, comment=''}
