@@ -9,7 +9,7 @@
 #' @details This predict UHC Work RVUS from Work RVUs
 #' @export
 
-findClusters<-function(mydata, n=10, seed = 2012,plotIt = TRUE){
+findClusters<-function(mydata, n=10, seed = 2012,plotIt = TRUE, vebose = FALSE){
   set.seed(seed)
   mydata<-as.matrix(mydata[,apply(mydata, c(2), class) %in% c('integer', 'numeric')])
   cores<-parallel::detectCores()    
@@ -26,15 +26,17 @@ findClusters<-function(mydata, n=10, seed = 2012,plotIt = TRUE){
   }
   stopCluster(cl)
   rownames(output)<-paste('NumClusters', 1:n, sep = '')
+  if(verbose)print(head(output))
   if(plotIt){
-    plot( y = range(output[,1]),x = output[,3], type = 'l', 
+    plot( y = output[,1],
+          x = output[,3], type = 'l', 
           ylab = 'scaled error', 
           xlab = 'Cluster of Numbers',
           main = 'Optimum Number of Clusters')
-    text( y= range(output[,1]),x = output[,3], labels = output[,3])
-    lines(y = range(output[,2]), x = output[,3], col = 'blue')
-    text( y= range(output[,2]),x = output[,3], labels = output[,3], col ='blue')
-    legend('topright', fill = c('black', 'blue'), 
+    text( y = output[,1],x = output[,3], labels = output[,3])
+    lines(y = output[,2], x = output[,3], col = 'blue')
+    text( y = output[,2],x = output[,3], labels = output[,3], col ='blue')
+    legend('right', fill = c('black', 'blue'), 
            legend = c('SSE Within Clusters', 'SSE Between Clusters'))
     
     

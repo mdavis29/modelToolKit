@@ -4,7 +4,7 @@
 \alias{findClusters}
 \title{Find the Optimum Kmeans Cluster Model}
 \usage{
-findClusters(mydata, n = 10, seed = 2012, plotIt = TRUE)
+findClusters(mydata, n = 10, seed = 2012, plotIt = TRUE, vebose = FALSE)
 }
 \arguments{
 \item{mydata}{list of models}

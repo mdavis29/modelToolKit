@@ -4,8 +4,8 @@ author: "Matthew Davis"
 date: "August 4, 2017"
 output: html_document
 ---
-
-```{r}
+Get predictive model prefomance by a catagory
+```{r setup, message=FALSE, comment=''}
 try(detach(package:modelToolKit, unload = TRUE))
 library(modelToolKit)
 library(rpart)
@@ -22,3 +22,13 @@ head(cats,2)
 preformanceByCatagory(preds, obs, cats)
 
 ```
+Find differences between data frames
+```{r}
+
+find2dfDiffs(iris[,1:4],iris[, 1:4]+.12)
+```
+
+```{r, }
+findClusters(iris[,1:4])
+```
+
