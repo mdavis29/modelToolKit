@@ -2,6 +2,8 @@
 
 export(codeAPRDRG)
 export(codeMSDRG)
+export(dataFrameFactDiffs)
+export(factorDiffs)
 export(find2dfDiffs)
 export(findClusters)
 export(getZip)

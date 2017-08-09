@@ -39,3 +39,24 @@ Find the optimal number of clusters
 findClusters(iris[,1:4])
 ```
 
+Find differences between two factors 
+```{r}
+set.seed(12012)
+x = as.factor(rep(c('a','b','c' , 'a'), 10))
+y = as.factor(sample(c('a','b','c'), 30, replace = TRUE))
+z<-factorDiffs(x,y)
+
+
+```
+
+Find differencew between all factors in two data frames
+```{r}
+size = 100
+df1<-data.frame(x = as.factor(sample(c('a','b','c' ,'d'),size, replace = TRUE)),
+                y = as.factor(sample(c('a','b','c','a') ,size, replace = TRUE)))
+
+df2<-data.frame(x = as.factor(sample(c('a','b','c','c'),size, replace = TRUE)),
+                y = as.factor(sample(c('a','b','c','b'), size, replace = TRUE)))
+
+dataFrameFactDiffs(df1, df2)
+```
