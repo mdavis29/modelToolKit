@@ -60,3 +60,19 @@ df2<-data.frame(x = as.factor(sample(c('a','b','c','c'),size, replace = TRUE)),
 
 dataFrameFactDiffs(df1, df2)
 ```
+
+
+
+```{r}
+mydata<-data.frame(fact1 = as.factor(rep(c('a','a','c', NA), 1000)), 
+                  fact2 = as.factor(rep(c('e','e','g','h'), 1000)))
+mydata1<-data.frame(fact1 = as.factor(rep(c('a','b b','F' ,NA), 1000)), 
+                  fact2 = as.factor(rep(c('k','f','g','h'), 1000)))
+
+dmv<-dummyVars(~., mydata)
+str(mydata)
+str(levelMatcher(dmv, newData = mydata1))
+str(levelMatcher(newData = mydata1, oldData = mydata))
+```                
+
+
