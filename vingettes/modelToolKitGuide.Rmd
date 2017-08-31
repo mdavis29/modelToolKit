@@ -62,17 +62,20 @@ dataFrameFactDiffs(df1, df2)
 ```
 
 
-
+Apply levels from one data frame to another, and use encoding to create an encoded matrix 
 ```{r}
 mydata<-data.frame(fact1 = as.factor(rep(c('a','a','c', NA), 1000)), 
                   fact2 = as.factor(rep(c('e','e','g','h'), 1000)))
 mydata1<-data.frame(fact1 = as.factor(rep(c('a','b b','F' ,NA), 1000)), 
                   fact2 = as.factor(rep(c('k','f','g','h'), 1000)))
 
-dmv<-dummyVars(~., mydata)
+dmv<-dummyVars(~., mydata, n = c(2,2))
 str(mydata)
 str(levelMatcher(dmv, newData = mydata1))
-str(levelMatcher(newData = mydata1, oldData = mydata))
+mydata1.matched<-(levelMatcher(newData = mydata1, oldData = mydata))
+mydata1.dmv<-(predict(dmv,mydata1.matched))
+mydata1.dmv[is.na(mydata1.dmv)]<-0
+head(mydata1.dmv)
 ```                
 
 
