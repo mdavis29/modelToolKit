@@ -1,4 +1,5 @@
 #' @title Level Matcher 
+#' @param dmv a dummy variable object from caret
 #' @param newData data frame
 #' @param oldData data frame 
 #' @param verbose print debugging output

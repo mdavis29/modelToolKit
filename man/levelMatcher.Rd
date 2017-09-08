@@ -7,6 +7,8 @@
 levelMatcher(dmv = NULL, newData, oldData = NULL, verbose = TRUE)
 }
 \arguments{
+\item{dmv}{a dummy variable object from caret}
+
 \item{newData}{data frame}
 
 \item{oldData}{data frame}
