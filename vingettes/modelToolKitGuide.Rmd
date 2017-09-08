@@ -7,7 +7,10 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
-Get predictive model prefomance by a catagory
+#### Predictive Model Preformance 
+
+Get predictive model prefomance by a catagory.  Check to see if a model is preforming differently in by a group or catagory
+
 ```{r setup, message=FALSE, comment=''}
 try(detach(package:modelToolKit, unload = TRUE))
 library(modelToolKit)
@@ -22,6 +25,8 @@ cats<-as.factor(km$cluster)
 preformanceByCatagory(preds, obs, cats)
 
 ```
+
+#### Cluster Model Utilities 
 
 Assign new clusters using kmeans to new data 
 
@@ -38,6 +43,7 @@ Find the optimal number of clusters
 ```{r, }
 findClusters(iris[,1:4])
 ```
+#### Data Frame and Factor Utlities 
 
 Find differences between two factors 
 ```{r}
@@ -49,7 +55,8 @@ z
 
 ```
 
-Find differencew between all factors in two data frames
+Find difference between all factors in two data frames
+
 ```{r}
 size = 100
 df1<-data.frame(x = as.factor(sample(c('a','b','c' ,'d'),size, replace = TRUE)),
@@ -64,6 +71,8 @@ dataFrameFactDiffs(df1, df2)
 
 
 Level Matcher Apply one set of levels to another data frame
+In the case where levels are in the new data frame, but not in the original, the values are mapped to <NA>
+
 ```{r}
 data1<-data.frame(x = as.factor(rep(c('a', 'b'), 10)), 
                   y =  as.factor(rep(c('c', 'd'), 10)))
@@ -72,7 +81,13 @@ data2<-data.frame(x = as.factor(rep(c('a', 'b', 'GG'), 10)),
                   y =  as.factor(rep(c('c', 'FF','GG'), 10)))
 str(levelMatcher(newData = data2, oldData = data1))
 ```
-```{r cars}
+##### Variable Contributions
+
+
+Generate a predictive model for housing price over the mean housing price using the Sacramento data set inside caret. This model will be used to demonstrate logistic difference between observation functions
+
+
+```{r , message = FALSE}
 library(caret)
 
 data("Sacramento")
@@ -93,9 +108,11 @@ Find the different factor contributions between a reference observation and a te
 ```{r}
 logisticDifference(fit,rd[2,predVars], mydata =  rd )
 ```
+
 Find the different factor contributions between a reference observation and a test data frame of observations
 
 ```{r}
-x<-logisticDifferenceDf(fit,rd[1:50,predVars], mydata =  rd, verbose = TRUE )
+x<-logisticDifferenceDf(fit,rd[1:2,predVars], mydata =  rd, verbose = TRUE )
+print(x)
 ```
 
