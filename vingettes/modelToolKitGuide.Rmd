@@ -31,7 +31,10 @@ preformanceByCatagory(preds, obs, cats)
 Assign new clusters using kmeans to new data 
 
 ```{r }
-head(predictKmeans(km, iris))
+table(predictKmeans(km, iris)[,'cluster'])
+x<-iris
+x[,1]<-NA
+table(predictKmeans(km, x)[, 'cluster'])
 ```
 
 Find differences between data frames

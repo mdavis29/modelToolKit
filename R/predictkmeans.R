@@ -25,9 +25,10 @@ predictKmeans<- function(fit, newdata, verbose = FALSE){
     output<-foreach(i =1:n,
                     .packages = 'stats', 
                     .combine = 'cbind' ) %dopar%{
-      as.matrix(apply(newdata.m,c(1), function(x)sum(x-centers[i,])^2 ), ncol = 1)
+      as.matrix(apply(newdata.m,c(1), function(x)sum(x-centers[i,], na.rm = TRUE )^2 ), ncol = 1)
                     }
     stopCluster(cl)
+    if(verbose)print(str(output))
     output<-as.data.frame(output)
     colnames(output)<-paste(paste('cluster', rownames(centers), sep = ''), 'SSE',sep  = '.')
     output$cluster<-apply(output, 1, which.min)
