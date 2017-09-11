@@ -15,7 +15,7 @@ findClusters<-function(mydata, n=10, seed = 2012,plotIt = TRUE, verbose = FALSE)
   mydata<-as.matrix(mydata[,apply(mydata, c(2), class) %in% c('integer', 'numeric')])
   cores<-parallel::detectCores()    
   cores<-min(c(cores, n))
-  cl<-makeCluster(cores, type = 'SOCK')
+  cl<-makeCluster(cores)
   registerDoParallel(cl)
   if(verbose)print(paste(cores, 'cores used', sep = ':'))
   output <- foreach( i = 1:n, .inorder = TRUE,.combine = 'rbind') %dopar%{

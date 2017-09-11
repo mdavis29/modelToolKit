@@ -2,7 +2,7 @@
 % Please edit documentation in R/findDfDistoDiffs.R
 \name{find2dfDiffs}
 \alias{find2dfDiffs}
-\title{Find the Optimum Kmeans Cluster Model}
+\title{Find Differnces between data frames}
 \usage{
 find2dfDiffs(df1, df2, verbose = TRUE)
 }

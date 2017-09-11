@@ -1,4 +1,4 @@
-#' @title Find the Optimum Kmeans Cluster Model
+#' @title Find Differnces between data frames
 #' @param df1 a data frame
 #' @param df2 a data frame 
 #' @param verbose print debugging output

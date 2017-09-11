@@ -7,7 +7,10 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
-Get predictive model prefomance by a catagory
+#### Predictive Model Preformance 
+
+Get predictive model prefomance by a catagory.  Check to see if a model is preforming differently in by a group or catagory
+
 ```{r setup, message=FALSE, comment=''}
 try(detach(package:modelToolKit, unload = TRUE))
 library(modelToolKit)
@@ -22,6 +25,8 @@ cats<-as.factor(km$cluster)
 preformanceByCatagory(preds, obs, cats)
 
 ```
+
+#### Cluster Model Utilities 
 
 Assign new clusters using kmeans to new data 
 
@@ -38,6 +43,7 @@ Find the optimal number of clusters
 ```{r, }
 findClusters(iris[,1:4])
 ```
+#### Data Frame and Factor Utlities 
 
 Find differences between two factors 
 ```{r}
@@ -45,11 +51,12 @@ set.seed(12012)
 x = as.factor(rep(c('a','b','c' , 'a'), 10))
 y = as.factor(sample(c('a','b','c'), 30, replace = TRUE))
 z<-factorDiffs(x,y)
-
+z
 
 ```
 
-Find differencew between all factors in two data frames
+Find difference between all factors in two data frames
+
 ```{r}
 size = 100
 df1<-data.frame(x = as.factor(sample(c('a','b','c' ,'d'),size, replace = TRUE)),
@@ -62,20 +69,50 @@ dataFrameFactDiffs(df1, df2)
 ```
 
 
-Apply levels from one data frame to another, and use encoding to create an encoded matrix 
+
+Level Matcher Apply one set of levels to another data frame
+In the case where levels are in the new data frame, but not in the original, the values are mapped to <NA>
+
 ```{r}
-mydata<-data.frame(fact1 = as.factor(rep(c('a','a','c', NA), 1000)), 
-                  fact2 = as.factor(rep(c('e','e','g','h'), 1000)))
-mydata1<-data.frame(fact1 = as.factor(rep(c('a','b b','F' ,NA), 1000)), 
-                  fact2 = as.factor(rep(c('k','f','g','h'), 1000)))
+data1<-data.frame(x = as.factor(rep(c('a', 'b'), 10)), 
+                  y =  as.factor(rep(c('c', 'd'), 10)))
 
-dmv<-dummyVars(~., mydata, n = c(2,2))
-str(mydata)
-str(levelMatcher(dmv, newData = mydata1))
-mydata1.matched<-(levelMatcher(newData = mydata1, oldData = mydata))
-mydata1.dmv<-(predict(dmv,mydata1.matched))
-mydata1.dmv[is.na(mydata1.dmv)]<-0
-head(mydata1.dmv)
-```                
+data2<-data.frame(x = as.factor(rep(c('a', 'b', 'GG'), 10)), 
+                  y =  as.factor(rep(c('c', 'FF','GG'), 10)))
+str(levelMatcher(newData = data2, oldData = data1))
+```
+##### Variable Contributions
 
+
+Generate a predictive model for housing price over the mean housing price using the Sacramento data set inside caret. This model will be used to demonstrate logistic difference between observation functions
+
+
+```{r , message = FALSE}
+library(caret)
+
+data("Sacramento")
+predVars<-c('city', 'beds', 'sqft','baths', 'type')
+rd<-Sacramento[, predVars]
+rd$class<-as.factor(ifelse(Sacramento$price > mean(Sacramento$price),1,0 ))
+f<-formula(class~.)
+fit<-glm(f, rd, family = 'binomial')
+
+preds<-predict(fit, rd, type = 'response' )
+```
+check model preformance 
+```{r}
+cutoff = .5
+postResample(as.factor(ifelse(preds > cutoff,1,0)), rd$class)
+```
+Find the different factor contributions between a reference observation and a test observation
+```{r}
+logisticDifference(fit,rd[2,predVars], mydata =  rd )
+```
+
+Find the different factor contributions between a reference observation and a test data frame of observations
+
+```{r}
+x<-logisticDifferenceDf(fit,rd[1:2,predVars], mydata =  rd, verbose = TRUE )
+print(x)
+```
 
