@@ -30,7 +30,7 @@ predictKmeans<- function(fit, newdata, verbose = FALSE){
     stopCluster(cl)
     output<-as.data.frame(output)
     colnames(output)<-paste(paste('cluster', rownames(centers), sep = ''), 'SSE',sep  = '.')
-    output$cluster<-as.factor(apply(output, 1, which.min))
+    output$cluster<-apply(output, 1, which.min)
     if(verbose)print(head(output))
     output$totalSSE<-apply(output[, !colnames(output) %in% 'cluster'],1, sum)
     return(output)}
