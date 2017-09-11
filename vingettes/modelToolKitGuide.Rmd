@@ -116,3 +116,17 @@ x<-logisticDifferenceDf(fit,rd[1:2,predVars], mydata =  rd, verbose = TRUE )
 print(x)
 ```
 
+
+NA to unknow and NA to Value transform
+```{r}
+# create some data
+mydata<-data.frame(x1 = rep(c('a', 'b', NA, 'c'),10),
+                   x2 = rep(c('a', 'b', NA, 'c'),10),
+                   y1 = rep(c(1,2,3,NA), 10),
+                   y2 = rep(c(1,2,3,NA), 10))
+
+NAtoValueDf(mydata, numVal = 0 , newLevName = 'unKnown' )
+
+```
+
+
