@@ -21,6 +21,7 @@ logisticDifference<-function(model, testOb,
   if(verbose)print(predVars)
   if(class(model)[1] %in% 'glm'){
     ref<-predict(model, refOb, type = 'response')
+    testOb.pred<-predict(model, testOb, type = 'response')
     output<-c()
     for(i in 1:(length(predVars))){
       tempOb<-refOb[, predVars]
@@ -32,6 +33,7 @@ logisticDifference<-function(model, testOb,
   if(class(model)[1] %in% 'ranger'){
     output<-c()
     ref<-predict(model, refOb)$predictions[,2]
+    testOb.pred<-predict(model, testOb)$predictions[,2]
     for(i in 1:(length(predVars))){
       tempOb<-refOb[, predVars]
       tempOb[,predVars[i]]<-testOb[, predVars[i]]
@@ -40,7 +42,8 @@ logisticDifference<-function(model, testOb,
     }
   }
   if(class(model)[1] %in% 'rpart'){
-    ref<-predict(model, refOb  )
+    ref<-predict(model, refOb  )[,2]
+    testOb.pred<-predict(model,testOb.pred)[,2]
     output<-c()
     for(i in 1:(length(predVars))){
       tempOb<-refOb[, predVars]
@@ -50,5 +53,7 @@ logisticDifference<-function(model, testOb,
     }
   }
   names(output)<-predVars  
+  preds<-setNames(c( ref, testOb.pred),c('referencePred', 'testPred'))
+  output<-c(output, preds)
   return(output)
 }

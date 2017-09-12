@@ -115,7 +115,11 @@ logisticDifference(fit,rd[2,predVars], mydata =  rd )
 Find the different factor contributions between a reference observation and a test data frame of observations
 
 ```{r}
-x<-logisticDifferenceDf(fit,rd[1:2,predVars], mydata =  rd, verbose = TRUE )
+x<-logisticDifferenceDf(model = fit,
+                        testObs = rd[1:2,predVars],
+                        refData = rd, 
+                        p = .4,
+                        verbose = TRUE )
 print(x)
 ```
 
