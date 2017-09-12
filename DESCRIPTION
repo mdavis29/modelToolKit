@@ -6,7 +6,7 @@ Author: Matthew Davis, James Zeng
 Maintainer: Matthew davsi <davismat@musc.edu>
 Description: This is a package of common model tools used at musc
 License: MIT
-Depends: stats, ModelMetrics, pROC,parallel, doParallel, foreach
+Depends: stats, ModelMetrics, pROC,parallel, doParallel, foreach,gridExtra
 Suggests: knitr, rmarkdown, caret
 VignetteBuilder: knitr
 Encoding: UTF-8

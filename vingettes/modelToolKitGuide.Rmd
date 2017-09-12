@@ -120,7 +120,7 @@ x<-logisticDifferenceDf(model = fit,
                         refData = rd, 
                         p = .4,
                         verbose = TRUE )
-print(x)
+print(x$output)
 ```
 
 
