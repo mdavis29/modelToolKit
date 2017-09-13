@@ -5,24 +5,41 @@
 #' @param refData a data frame with columns included in model
 #' @param className  name of the class column used for stratitifed resampling 
 #' @param p percent of the refData to keep in the sample
+#' @param seed random sampleing seed
 #' @param verbose print debugging output
 #' @description a function that interates through model predictors to estimate impact
 #' @return a vector of estimated absolute influences 
 #' @export
 
-logisticDifferenceDf<-function(model,testObs, refData, className = NULL,p = .1,seed = 2012,  verbose = TRUE){
-  n<-nrow(testObs)
+logisticDifferenceDf<-function(model,
+                               testObs, 
+                               refData, 
+                               className = NULL,
+                               p = .1,
+                               seed = 2012,  
+                               verbose = TRUE){
+  n <- nrow(testObs)
+  varImp<-NULL
   if(n == 1){
     output<-logisticDifference(model = model,
                                testOb = testObs,
                                refOb = refData, 
-                               mydata = mydata,
-                               verbose = verbose, 
-                               seed = 2012)
+                               verbose = verbose)
   }
-  if(class(model)[1] %in% 'ranger')preds<-predict(model, refData)$predictions[,2]
-  if(class(model)[1] %in% 'rpart')preds<-predict(model, refData)[,2]
-  if(class(model)[1] %in% 'glm')preds<-predict(model, refData, type = 'response')
+  if(class(model)[1] %in% 'ranger'){
+    preds<-predict(model, refData)$predictions[,2]
+    varImp<-try(model$variable.importance[order(abs(model$variable.importance), decreasing = TRUE)])
+  }  
+  if(class(model)[1] %in% 'rpart'){
+    preds<-predict(model, refData)[,2]
+    varImp<-try(model$variable.importance[order(abs(model$variable.importance), decreasing = TRUE)])
+  }
+  if(class(model)[1] %in% 'glm'){
+    preds<-predict(model, refData, type = 'response')
+    varImp<-caret::varImp(model)[,1]
+    names(varImp)<-rownames(caret::varImp(model))
+    varImp<-varImp[order(varImp, decreasing = TRUE)]
+    }  
   n.samples <- 1
   if(!is.null(nrow(refData))){
     set.seed(seed)
@@ -64,56 +81,62 @@ logisticDifferenceDf<-function(model,testObs, refData, className = NULL,p = .1,s
                    testObs = testObs, 
                    className = className,
                    preds = preds,
-                   p = p)
+                   p = p,
+                   varImp = varImp,
+                   class = class(model))
   class(outputList) <- append(class(outputList),"logisticDiff")
   return( outputList)
 }
 
-
-
-
-#' @title Plot method for class logistucDiff
-
+#' @title Plot method for class logisticDiff
+#' @param obj an object of class logisticDiff
+#' @param n.obs number of obs to be used
+#' @param bins number of bins on histogram plot
+#' @param indvidualPlot to individual observation influence
+#' @param verbose print debugging
+#' @description A plot method of variable inflence objects
+#' @export
 #' 
-logisticDiff.plot<-function(obj , n = 50 ){
-  output<-head(data.frame(obj$output), n)
-  print('only uses first 50 obs')
-  output$testObNumber<-as.factor(paste('test Ob', 1:(nrow(output))))
- 
-  ## density plot of observations 
-  p1<- ggplot(data.frame(preds = preds),  aes(x=preds)) +
-      geom_histogram(bins = 50, show.legend = TRUE) +
-      geom_vline(data = output,
-             aes(xintercept = testPred , color=testObNumber) ,
-             show.legend = TRUE )
- plotList<-list()
- plotList<-append(plotList, p1)
- nr<-nrow(output)
- nr<-min(nr, n)
- for(i in 1:nr){
-  tempDat<-c(output[i, !colnames(output)%in% c('testPred','testObNumber', 'referencePred')])
-  dat<-data.frame(vals = unlist(tempDat), names = names(tempDat))
-  dat<-dat[order(abs(dat$vals), decreasing = TRUE), ]
-  testPred<-round(output[i, 'testPred'],3)
-  refPred<-round(output[i,  'referencePred'],3) 
-  plotTitle<-paste( 'Varible Importance',
-                    paste(
-                      paste('test pred', testPred, sep =':'),
-                      paste('reference pred', refPred, sep =':')), sep = ' --- ')
-  
-  dat<-head(dat,n)
-  tempPlot<- ggplot(dat, aes(x = reorder(names,abs(vals)) ,  y = vals, fill = vals))+ 
-            geom_bar(stat="identity") + 
-            scale_fill_gradient2(low = 'darkred', mid = 'gray', high= 'blue', midpoint = 0) +
-            ylim(-max(abs(dat$vals)), max(abs(dat$vals)))+
-            coord_flip()+ 
-            geom_hline(yintercept = 0 ,color="black") +
-            ggtitle(  plotTitle) + 
-            xlab('variable Name') + 
-            ylab('contribution')
 
-    plotList<-append(plotList, tempPlot)
- }
- do.call(grid.arrange, plotList)
+plot.logisticDiff<-function(obj , n.obs = 50,n.vars = 10,  indvidualPlot = FALSE, bins = 50, verbose = FALSE ){
+  n.vars<-min(n.vars, ncol(obj$output)-2)
+  output<-head(data.frame(obj$output), n.obs)
+  if(verbose)print('only uses first 50 obs')
+  output$testObNumber<-as.factor(paste('test Ob', 1:(nrow(output))))
+  numCols<-colnames(output)[lapply(output, class) %in%c('numeric', 'integer')]
+  if(!indvidualPlot){
+    p <- ggplot(data.frame(preds = preds),  aes(x=preds)) +
+        geom_histogram(bins = bins, show.legend = TRUE) +
+        geom_vline(data = output,
+               aes(xintercept = testPred , color=testObNumber) ,
+               show.legend = TRUE )
+    print(p)
+  }
+  if(indvidualPlot){
+    dat.m<-melt(dat, id = 'testObNumber')
+    dat.m1<-dat.m[dat.m$variable %in% c('referencePred', 'testPred'),]
+    dat.m2<-dat.m[!dat.m$variable %in% c('referencePred', 'testPred'),]
+    agg<-aggregate(value~variable, data=dat.m2, FUN = mean)
+    agg<-agg[order(abs(agg$value), decreasing = TRUE),]
+    keepVars<-agg$variable[1:n.vars]
+    dat.m2<-dat.m2[dat.m2$variable %in% keepVars, ]
+    dat.m2<-dat.m2[order(dat.m2$value, decreasing = TRUE),]
+    
+    dat.m<-rbind(dat.m1, dat.m2)
+
+    p <- ggplot(dat.m, aes(y = value))+ 
+                      geom_col(aes(x = variable, colour = value, fill = value), show.legend = FALSE)+ 
+                      geom_text(aes(label = round(value,3), x = variable, y = value/2 ), show.legend = FALSE)+
+                      coord_flip()+
+                      
+                      ggtitle('Varible Importance') + 
+                      xlab('variable Name') + 
+                      ylab('contribution') +   
+                      scale_fill_gradient2(low = 'darkred', mid = 'gray', high= 'lightblue', midpoint = 0) + 
+                      facet_wrap(~ testObNumber)
+
+    print(p)
+  }
+  return(p)
 }
   

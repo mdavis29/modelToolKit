@@ -2,10 +2,11 @@
 title: "modelToolKitGuide"
 author: "Matthew Davis"
 date: "August 4, 2017"
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Title}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 #### Predictive Model Preformance 
 
@@ -101,26 +102,28 @@ f<-formula(class~.)
 fit<-glm(f, rd, family = 'binomial')
 
 preds<-predict(fit, rd, type = 'response' )
+#fitranger<-ranger(f, rd, num.tree = 10, probability = TRUE, importance = 'impurity')
+#fitrpart<-rpart(f, rd)
 ```
-check model preformance 
-```{r}
-cutoff = .5
-postResample(as.factor(ifelse(preds > cutoff,1,0)), rd$class)
-```
+
+
+
 Find the different factor contributions between a reference observation and a test observation
 ```{r}
-logisticDifference(fit,rd[2,predVars], mydata =  rd )
+logisticDifference(fitranger,rd[2,predVars], mydata =  rd )
 ```
 
 Find the different factor contributions between a reference observation and a test data frame of observations
 
 ```{r}
+library(modelToolKit)
 x<-logisticDifferenceDf(model = fit,
-                        testObs = rd[1:2,predVars],
+                        testObs = rd[1:4,predVars],
                         refData = rd, 
                         p = .4,
                         verbose = TRUE )
 print(x$output)
+plot(x, indvidualPlot = TRUE, n.vars = 3)
 ```
 
 

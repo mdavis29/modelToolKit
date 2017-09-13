@@ -4,17 +4,21 @@
 \alias{logisticDifferenceDf}
 \title{Logistic Difference for Data Frames}
 \usage{
-logisticDifferenceDf(model, testObs, refOb = NULL, mydata = NULL,
-  verbose = TRUE)
+logisticDifferenceDf(model, testObs, refData, className = NULL, p = 0.1,
+  seed = 2012, verbose = TRUE)
 }
 \arguments{
 \item{model}{a model of class glm, rpart or ranger}
 
 \item{testObs}{a data frame with one row to predict with the model}
 
-\item{refOb}{a data frame with one row for a reference observation}
+\item{refData}{a data frame with columns included in model}
 
-\item{mydata}{a data frame with columns included in model}
+\item{className}{name of the class column used for stratitifed resampling}
+
+\item{p}{percent of the refData to keep in the sample}
+
+\item{seed}{random sampleing seed}
 
 \item{verbose}{print debugging output}
 }

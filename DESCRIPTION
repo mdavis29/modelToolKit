@@ -1,13 +1,13 @@
 Package: modelToolKit
 Type: Package
 Title: Predictive Models for basic tasks at MUSC
-Version: 0.2.6
-Author: Matthew Davis, James Zeng
+Version: 0.2.7
+Author: Matthew Davis
 Maintainer: Matthew davsi <davismat@musc.edu>
 Description: This is a package of common model tools used at musc
 License: MIT
-Depends: stats, ModelMetrics, pROC,parallel, doParallel, foreach,gridExtra
-Suggests: knitr, rmarkdown, caret
+Depends: stats, ModelMetrics, pROC,parallel, doParallel, foreach,gridExtra, ggplot2
+Suggests: knitr, rmarkdown, caret, pROC
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
