@@ -110,12 +110,13 @@ preds<-predict(fit, rd, type = 'response' )
 
 Find the different factor contributions between a reference observation and a test observation
 ```{r}
-logisticDifference(fitranger,rd[2,predVars], mydata =  rd )
+logisticDifference(fit,rd[2,predVars], mydata =  rd )
 ```
 
 Find the different factor contributions between a reference observation and a test data frame of observations
 
 ```{r}
+library(reshape)
 library(modelToolKit)
 x<-logisticDifferenceDf(model = fit,
                         testObs = rd[1:4,predVars],
@@ -135,7 +136,7 @@ mydata<-data.frame(x1 = rep(c('a', 'b', NA, 'c'),10),
                    y1 = rep(c(1,2,3,NA), 10),
                    y2 = rep(c(1,2,3,NA), 10))
 
-NAtoValueDf(mydata, numVal = 0 , newLevName = 'unKnown' )
+head(NAtoValueDf(mydata, numVal = 0 , newLevName = 'unKnown' ), 10)
 
 ```
 

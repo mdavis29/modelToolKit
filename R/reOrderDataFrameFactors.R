@@ -10,6 +10,7 @@ reOrderDataFrameFactors <- function(mydata){
     if(class(mydata[,i]) == 'factor'){
       o<-table(mydata[,i])[order(table(mydata[,i]), decreasing = TRUE)]
       levels(mydata[,i])<-names(o)
+      relevel(mydata[,i], ref = names(o)[1])
     }}
   return(mydata)
 }

@@ -113,7 +113,7 @@ plot.logisticDiff<-function(obj , n.obs = 50,n.vars = 10,  indvidualPlot = FALSE
     print(p)
   }
   if(indvidualPlot){
-    dat.m<-melt(dat, id = 'testObNumber')
+    dat.m<-melt(output, id = 'testObNumber')
     dat.m1<-dat.m[dat.m$variable %in% c('referencePred', 'testPred'),]
     dat.m2<-dat.m[!dat.m$variable %in% c('referencePred', 'testPred'),]
     agg<-aggregate(value~variable, data=dat.m2, FUN = mean)
@@ -137,6 +137,5 @@ plot.logisticDiff<-function(obj , n.obs = 50,n.vars = 10,  indvidualPlot = FALSE
 
     print(p)
   }
-  return(p)
 }
   
