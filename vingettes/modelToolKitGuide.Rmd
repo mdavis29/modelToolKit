@@ -74,6 +74,18 @@ dataFrameFactDiffs(df1, df2)
 
 
 
+##### re order the levels of a data frame by frequency 
+works on a data frame or a factor 
+```{r}
+mydata<-data.frame(x = c(rep('a', 10),rep('b', 15), rep('c' , 10)),
+                    y = c(rep('a', 10),rep('b', 5), rep('c' , 20)))
+str(mydata)
+str(reOrderAll(mydata))
+```
+
+
+
+
 Level Matcher Apply one set of levels to another data frame
 In the case where levels are in the new data frame, but not in the original, the values are mapped to <NA>
 
