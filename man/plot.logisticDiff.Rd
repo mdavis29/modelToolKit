@@ -12,6 +12,8 @@
 
 \item{n.obs}{number of obs to be used}
 
+\item{n.vars}{number of variables to plot}
+
 \item{indvidualPlot}{to individual observation influence}
 
 \item{bins}{number of bins on histogram plot}

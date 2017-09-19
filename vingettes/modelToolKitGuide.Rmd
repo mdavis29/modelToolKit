@@ -105,6 +105,8 @@ Generate a predictive model for housing price over the mean housing price using 
 
 ```{r , message = FALSE}
 library(caret)
+library(ranger)
+library(rpart)
 
 data("Sacramento")
 predVars<-c('city', 'beds', 'sqft','baths', 'type')
@@ -114,15 +116,15 @@ f<-formula(class~.)
 fit<-glm(f, rd, family = 'binomial')
 
 preds<-predict(fit, rd, type = 'response' )
-#fitranger<-ranger(f, rd, num.tree = 10, probability = TRUE, importance = 'impurity')
-#fitrpart<-rpart(f, rd)
+fitranger<-ranger(f, rd, num.tree = 10, probability = TRUE, importance = 'impurity')
+fitrpart<-rpart(f, rd)
 ```
 
 
 
 Find the different factor contributions between a reference observation and a test observation
 ```{r}
-logisticDifference(fit,rd[2,predVars], mydata =  rd )
+logisticDifference(fitranger,rd[2,predVars], mydata =  rd )
 ```
 
 Find the different factor contributions between a reference observation and a test data frame of observations
@@ -130,7 +132,7 @@ Find the different factor contributions between a reference observation and a te
 ```{r}
 library(reshape)
 library(modelToolKit)
-x<-logisticDifferenceDf(model = fit,
+x<-logisticDifferenceDf(model = fitranger,
                         testObs = rd[1:4,predVars],
                         refData = rd, 
                         p = .4,

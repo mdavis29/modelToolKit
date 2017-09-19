@@ -26,15 +26,19 @@ logisticDifferenceDf<-function(model,
                                refOb = refData, 
                                verbose = verbose)
   }
-  if(class(model)[1] %in% 'ranger'){
+  modelClass<-class(model)[1]
+  packagesToLoad<-c()
+  if( modelClass %in% 'ranger'){
     preds<-predict(model, refData)$predictions[,2]
     varImp<-try(model$variable.importance[order(abs(model$variable.importance), decreasing = TRUE)])
+    packagesToLoad<-'ranger'
   }  
-  if(class(model)[1] %in% 'rpart'){
+  if( modelClass %in% 'rpart'){
     preds<-predict(model, refData)[,2]
     varImp<-try(model$variable.importance[order(abs(model$variable.importance), decreasing = TRUE)])
+    packagesToLoad<-'rpart'
   }
-  if(class(model)[1] %in% 'glm'){
+  if( modelClass %in% 'glm'){
     preds<-predict(model, refData, type = 'response')
     varImp<-caret::varImp(model)[,1]
     names(varImp)<-rownames(caret::varImp(model))
@@ -63,8 +67,8 @@ logisticDifferenceDf<-function(model,
     registerDoParallel(cl)
     output<-foreach(i = 1:n, .combine = 'rbind', .inorder = TRUE, .packages = 'modelToolKit') %dopar%{
       tempTestOb<-testObs[i,]
-      
-      tempOutput<-foreach(j = 1:n.samples, .combine = 'rbind')%do%{
+      packagesToLoad<-c(packagesToLoad, 'modelToolKit')
+      tempOutput<-foreach(j = 1:n.samples, .combine = 'rbind', .packages = packagesToLoad)%dopar%{
         tempRefOb<-reSampledData[j,]
         logisticDifference(model = model,
                          testOb = tempTestOb,
@@ -91,6 +95,7 @@ logisticDifferenceDf<-function(model,
 #' @title Plot method for class logisticDiff
 #' @param obj an object of class logisticDiff
 #' @param n.obs number of obs to be used
+#' @param n.vars number of variables to plot
 #' @param bins number of bins on histogram plot
 #' @param indvidualPlot to individual observation influence
 #' @param verbose print debugging
