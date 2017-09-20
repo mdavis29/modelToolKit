@@ -5,7 +5,7 @@
 \title{Preformance Test By Catagory}
 \usage{
 preformanceByCatagory(preds, obs, cats, classify = FALSE, minFreq = 10,
-  verbose = FALSE)
+  catName = NULL, verbose = FALSE)
 }
 \arguments{
 \item{preds}{a vector of predictions}

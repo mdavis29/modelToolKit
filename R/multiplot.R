@@ -1,7 +1,8 @@
 #' @title Multi Plot Function
 #' @param plotlist a list of ggplot plots
-#' @param file
+#' @param file as r-cookbook what this is 
 #' @param cols  number of columns
+#' @param ... additional args for multiplot
 #' @param layout plot layout
 #' @author cookbook-R
 #' @export

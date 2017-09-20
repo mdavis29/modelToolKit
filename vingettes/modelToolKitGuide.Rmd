@@ -12,9 +12,11 @@ vignette: >
 
 Get predictive model prefomance by a catagory.  Check to see if a model is preforming differently in by a group or catagory
 
-```{r setup, message=FALSE, comment=''}
+```{r setup, message=FALSE, comment='', results='hide'}
 try(detach(package:modelToolKit, unload = TRUE))
 library(modelToolKit)
+library(treemap)
+library(caret)
 library(rpart)
 data(iris)
 set.seed(2012)
@@ -23,9 +25,20 @@ km<-kmeans(iris[,1:4], 3)
 preds<-predict(fit, iris, type = 'class')
 obs<-iris[,'Species']
 cats<-as.factor(km$cluster)
-preformanceByCatagory(preds, obs, cats)
-
+x<-preformanceByCatagory(preds, obs, cats)
+plot(x)
 ```
+### Preformance by class in the case of regression models
+```{r, message=FALSE,results='hide' }
+data("Sacramento")
+fit<-rpart(price~.,data = Sacramento )
+preds<-predict(fit, Sacramento)
+obs<-Sacramento[, 'price']
+cats<-as.factor(Sacramento$city)
+x<-preformanceByCatagory(preds, obs, cats ,catName = 'city' )
+plot(x,2)
+```
+
 
 #### Cluster Model Utilities 
 

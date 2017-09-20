@@ -7,7 +7,11 @@
 multiplot(..., plotlist = NULL, file, cols = 1, layout = NULL)
 }
 \arguments{
+\item{...}{additional args for multiplot}
+
 \item{plotlist}{a list of ggplot plots}
+
+\item{file}{as r-cookbook what this is}
 
 \item{cols}{number of columns}
 

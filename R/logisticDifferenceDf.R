@@ -61,14 +61,15 @@ logisticDifferenceDf<-function(model,
   }
   if(verbose)print(paste('num samples', n.samples))
   if(n > 1){
+    packagesToLoad<-c(packagesToLoad, 'modelToolKit')
     cores<-parallel::detectCores()
     cores<-min(c(n, cores))
     cl<-makeCluster(cores)
     registerDoParallel(cl)
-    output<-foreach(i = 1:n, .combine = 'rbind', .inorder = TRUE, .packages = 'modelToolKit') %dopar%{
+    
+    output<-foreach(i = 1:n, .combine = 'rbind', .inorder = TRUE, .packages = packagesToLoad) %dopar%{
       tempTestOb<-testObs[i,]
-      packagesToLoad<-c(packagesToLoad, 'modelToolKit')
-      tempOutput<-foreach(j = 1:n.samples, .combine = 'rbind', .packages = packagesToLoad)%dopar%{
+      tempOutput<-foreach(j = 1:n.samples, .combine = 'rbind', .packages = packagesToLoad)%do%{
         tempRefOb<-reSampledData[j,]
         logisticDifference(model = model,
                          testOb = tempTestOb,

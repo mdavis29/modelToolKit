@@ -7,7 +7,7 @@
 #' @param verbose whether to print debugging output 
 #' @description test model preformance by a catagory
 #' @export
-preformanceByCatagory<-function(preds, obs, cats, classify = FALSE, minFreq = 10, verbose = FALSE){
+preformanceByCatagory<-function(preds, obs, cats, classify = FALSE, minFreq = 10,catName = NULL, verbose = FALSE){
   if(length(preds) != length(obs) | length(preds) != length(cats))stop('preds obs and cats are different lengths')
   if(class(preds) == 'factor' | class(obs) == 'factor'){
     classify <-TRUE
@@ -42,5 +42,45 @@ preformanceByCatagory<-function(preds, obs, cats, classify = FALSE, minFreq = 10
       output<-output[order(output[,1], decreasing = TRUE),]}
     if(!classify){colnames(output)[1:2]<-c('RMSE', 'Rsquared')
       output<-output[order(output[,1]),]}
+    output<-output[order(output$n), ]
+    class(output)<-append( 'preformByCat', class(output))
+    attr(output, 'outputType')<-ifelse(colnames(output)[1] == 'RMSE', 'reg', 'class')
+    attr(output, 'catName')<-catName
   return(output)
 }
+
+
+#' @title Plot method for preformance by category data frame
+#' @param obj data frame output from preformanceByCatagory 
+#' @param p integet show plot 1 or 2 (different preformance metric)
+#' @param verbose print output
+#' @description Treemap plot of performance by catagory, size is num of obs with that cat
+#' @export
+
+plot.preformByCat<-function(obj, p = 1, verbose =FALSE, labLen = 20){
+  obj$label<-paste(
+              paste(substr(as.character(obj[,3]), 1,labLen), obj[,4], sep = ' n:'), 
+                round(obj[,p],2), sep = '\n')
+  varName <- colnames(obj)[p]
+  pal<-"RdYlBu"
+  titleName<-paste('Model Performance by Catagory', attr(obj, 'catName'), sep = ': ')
+  obj<-obj[!is.na(obj[,varName]),]
+  if(varName[1] == 'RMSE'){
+    pal<-"YlOrRd"}
+  if(verbose)print(varName)
+  if(verbose)print(titleName)
+  if(verbose)print(pal)
+ p1<- treemap(dtf =  obj, 
+              index = c("label" ), 
+              vSize = 'n', 
+              vColor = varName ,
+              palette = pal,
+              title = titleName,
+              type = "value",
+              drop.unused.levels = TRUE)
+  return(p1)
+  }
+  
+  
+  
+  
