@@ -12,7 +12,7 @@ vignette: >
 
 Get predictive model prefomance by a catagory.  Check to see if a model is preforming differently in by a group or catagory
 
-```{r setup, message=FALSE, comment='', results='hide'}
+```{r setup, message=FALSE, comment='', results='hide' , fig.height=4, fig.width=6}
 try(detach(package:modelToolKit, unload = TRUE))
 library(modelToolKit)
 library(treemap)
@@ -25,11 +25,19 @@ km<-kmeans(iris[,1:4], 3)
 preds<-predict(fit, iris, type = 'class')
 obs<-iris[,'Species']
 cats<-as.factor(km$cluster)
+```
+
+plot preformance by class 
+
+```{r}
 x<-preformanceByCatagory(preds, obs, cats)
 plot(x)
 ```
+
+
+
 ### Preformance by class in the case of regression models
-```{r, message=FALSE,results='hide' }
+```{r, message=FALSE,results='hide' , fig.height=4, fig.width=6}
 data("Sacramento")
 fit<-rpart(price~.,data = Sacramento )
 preds<-predict(fit, Sacramento)
@@ -51,11 +59,6 @@ x[,1]<-NA
 table(predictKmeans(km, x)[, 'cluster'])
 ```
 
-Find differences between data frames
-```{r}
-
-find2dfDiffs(iris[,1:4],iris[, 1:4]+.12)
-```
 Find the optimal number of clusters
 ```{r, }
 findClusters(iris[,1:4])
@@ -87,7 +90,9 @@ dataFrameFactDiffs(df1, df2)
 
 
 
-##### re order the levels of a data frame by frequency 
+##### Dataframe Transforms
+
+Reorder all factor levels accordning to frequency, 
 works on a data frame or a factor 
 ```{r}
 mydata<-data.frame(x = c(rep('a', 10),rep('b', 15), rep('c' , 10)),
@@ -95,8 +100,6 @@ mydata<-data.frame(x = c(rep('a', 10),rep('b', 15), rep('c' , 10)),
 str(mydata)
 str(reOrderAll(mydata))
 ```
-
-
 
 
 Level Matcher Apply one set of levels to another data frame
@@ -110,6 +113,22 @@ data2<-data.frame(x = as.factor(rep(c('a', 'b', 'GG'), 10)),
                   y =  as.factor(rep(c('c', 'FF','GG'), 10)))
 str(levelMatcher(newData = data2, oldData = data1))
 ```
+
+
+Map all values  NA values  unknown catagory or a specific number if numeric
+
+```{r}
+# create some data
+mydata<-data.frame(x1 = rep(c('a', 'b', NA, 'c'),10),
+                   x2 = rep(c('a', 'b', NA, 'c'),10),
+                   y1 = rep(c(1,2,3,NA), 10),
+                   y2 = rep(c(1,2,3,NA), 10))
+
+head(NAtoValueDf(mydata, numVal = 0 , newLevName = 'unKnown' ), 10)
+
+```
+
+
 ##### Variable Contributions
 
 
@@ -133,14 +152,13 @@ fitranger<-ranger(f, rd, num.tree = 10, probability = TRUE, importance = 'impuri
 fitrpart<-rpart(f, rd)
 ```
 
-
-
-Find the different factor contributions between a reference observation and a test observation
+Find the different factor contributions between a reference observation and a test observation. 
+Uses a the most likely observation to test against. 
 ```{r}
 logisticDifference(fitranger,rd[2,predVars], mydata =  rd )
 ```
 
-Find the different factor contributions between a reference observation and a test data frame of observations
+Find the different factor contributions between a reference observation and a test data frame of observations. At the moment this does not scale very well.
 
 ```{r}
 library(reshape)
@@ -152,19 +170,6 @@ x<-logisticDifferenceDf(model = fitranger,
                         verbose = TRUE )
 print(x$output)
 plot(x, indvidualPlot = TRUE, n.vars = 3)
-```
-
-
-NA to unknow and NA to Value transform
-```{r}
-# create some data
-mydata<-data.frame(x1 = rep(c('a', 'b', NA, 'c'),10),
-                   x2 = rep(c('a', 'b', NA, 'c'),10),
-                   y1 = rep(c(1,2,3,NA), 10),
-                   y2 = rep(c(1,2,3,NA), 10))
-
-head(NAtoValueDf(mydata, numVal = 0 , newLevName = 'unKnown' ), 10)
-
 ```
 
 

@@ -70,15 +70,16 @@ plot.preformByCat<-function(obj, p = 1, verbose =FALSE, labLen = 20){
   if(verbose)print(varName)
   if(verbose)print(titleName)
   if(verbose)print(pal)
- p1<- treemap(dtf =  obj, 
+ p1<- invisible(treemap(dtf =  obj, 
               index = c("label" ), 
               vSize = 'n', 
               vColor = varName ,
               palette = pal,
               title = titleName,
               type = "value",
-              drop.unused.levels = TRUE)
-  return(p1)
+              draw = TRUE,
+              drop.unused.levels = TRUE,
+              inflate.labels = TRUE))
   }
   
   
