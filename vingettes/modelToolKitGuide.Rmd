@@ -4,9 +4,9 @@ author: "Matthew Davis"
 date: "August 4, 2017"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Model Tool Kit Guide}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{ modelToolKitGuide }
+  %\VignetteEncoding{UTF-8}
 ---
 
 
