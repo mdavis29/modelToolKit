@@ -2,10 +2,12 @@
 
 S3method(plot,logisticDiff)
 S3method(plot,preformByCat)
+S3method(predict,catagoryEncoder)
 export(NAtoValueDf)
 export(dataFrameFactDiffs)
 export(factorDiffs)
 export(findClusters)
+export(learnCharacterEncoding)
 export(levelMatcher)
 export(logisticDifference)
 export(logisticDifferenceDf)
